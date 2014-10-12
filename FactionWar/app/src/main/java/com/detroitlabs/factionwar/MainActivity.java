@@ -1,28 +1,27 @@
 package com.detroitlabs.factionwar;
 
 import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
+import android.widget.TextView;
 
 import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
 
-import java.net.MalformedURLException;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.SQLOutput;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
 
 
 public class MainActivity extends Activity {
+
+    //
 
     // https://neweden-dev.com/API
     // https://api.eveonline.com/Map/FacWarSystems.xml.aspx
@@ -32,13 +31,11 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
-        FactionService results = new FactionService();
-        results.doInBackground();
+        TextView helloWorld = (TextView) findViewById(R.id.hello_world);
+        FactionService apiGet = new FactionService();
+        new FactionService().execute();
+
+        helloWorld.setText(apiGet.doInBackground());
     }
 
 
@@ -61,37 +58,55 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
+    /*
+    **  Get the data and store it
+    */
+    class FactionService extends AsyncTask<Void, Void, String> {
 
-        public PlaceholderFragment() {
-        }
+        String apiOutput = null;
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
+        protected String doInBackground(Void... voids) {
+
+            HttpURLConnection urlConnection = null;
+            try {
+                URL url = new URL("http://api.openweathermap.org/data/2.5/weather?q=London&mode=xml");
+                urlConnection = (HttpURLConnection) url.openConnection();
+
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                Document doc = builder.parse(urlConnection.getInputStream());
+                TransformerFactory transFactory = TransformerFactory.newInstance();
+                Transformer xform = transFactory.newTransformer();
+
+                System.out.println("I FOUND WHAT YOU WANTED: "+urlConnection.getInputStream());
+                apiOutput = String.valueOf(urlConnection.getInputStream());
+                //DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+                //DocumentBuilder db = dbf.newDocumentBuilder();
+                //Document doc = db.parse(new InputSource(url.openStream()));
+                //doc.getDocumentElement().normalize();
+            } catch (Exception e) {
+                System.out.println("\n");
+                System.out.println("SOMETHING WENT WRONG: " + e);
+                System.out.println("\n");
+            } finally {
+                urlConnection.disconnect();
+            }
+
+            System.out.println("\n");
+            System.out.println("IS IT ME YOU'RE LOOKING FOR: " + apiOutput);
+            System.out.println("\n");
+
+            return apiOutput;
         }
-    }
-}
-
-class FactionService extends AsyncTask<Void, Void, Void> {
-
-
-    @Override
-    protected Void doInBackground(Void... voids) {
-        try {
-            URL url = new URL("https://api.eveonline.com/Map/FacWarSystems.xml.aspx");
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(new InputSource(url.openStream()));
-            doc.getDocumentElement().normalize();
-        } catch (Exception e) {
-            System.out.println("SOMETHING WENT WRONG: "+e);
+        protected void onProgressUpdate(Integer... progress) {
+            //setProgressPercent(progress[0]);
         }
-        return null;
+
+        protected void onPostExecute(String result) {
+            System.out.println("\n");
+            System.out.println("I COULD BE THE ONE: " + result);
+            System.out.println("\n");
+        }
     }
 }
