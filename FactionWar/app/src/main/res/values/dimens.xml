@@ -2,4 +2,8 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <integer name="minmatar_bar">50</integer>
+    <integer name="amarr_bar">50</integer>
+    <integer name="gallente_bar">50</integer>
+    <integer name="caldari_bar">50</integer>
 </resources>

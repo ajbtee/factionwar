@@ -1,10 +1,13 @@
 package com.detroitlabs.factionwar;
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -16,6 +19,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.SQLOutput;
+import java.util.logging.Handler;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -25,10 +29,22 @@ import javax.xml.transform.TransformerFactory;
 
 public class MainActivity extends Activity {
     TextView helloWorld;
-    int minmatar;
-    int amarr;
-    int gallente;
-    int caldari;
+    LinearLayout barAmarr;
+    LinearLayout barMinmatar;
+    LinearLayout barGallente;
+    LinearLayout barCaldari;
+    LinearLayout.LayoutParams paramsMinmatar;
+    LinearLayout.LayoutParams paramsAmarr;
+    LinearLayout.LayoutParams paramsGallente;
+    LinearLayout.LayoutParams paramsCaldari;
+    float minmatar;
+    float amarr;
+    float gallente;
+    float caldari;
+    float barGoalMinmatar;
+    float barGoalAmarr;
+    float barGoalGallente;
+    float barGoalCaldari;
 
     // https://neweden-dev.com/API
     // https://api.eveonline.com/Map/FacWarSystems.xml.aspx
@@ -39,9 +55,41 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FactionService apiGet = new FactionService();
+        barMinmatar = (LinearLayout) findViewById(R.id.bar_minmatar);
+        paramsMinmatar = (LinearLayout.LayoutParams) barMinmatar.getLayoutParams();
+        paramsMinmatar.weight = 0;
+        barAmarr = (LinearLayout) findViewById(R.id.bar_amarr);
+        paramsAmarr = (LinearLayout.LayoutParams) barAmarr.getLayoutParams();
+        paramsAmarr.weight = 0;
+        barGallente = (LinearLayout) findViewById(R.id.bar_gallente);
+        paramsGallente = (LinearLayout.LayoutParams) barGallente.getLayoutParams();
+        paramsGallente.weight = 0;
+        barCaldari = (LinearLayout) findViewById(R.id.bar_caldari);
+        paramsCaldari = (LinearLayout.LayoutParams) barCaldari.getLayoutParams();
+        paramsCaldari.weight = 0;
+
         helloWorld = (TextView) findViewById(R.id.pending_data);
         new FactionService().execute();
+
+        ValueAnimator animator = ValueAnimator.ofFloat(0,1f);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                float val = (Float) valueAnimator.getAnimatedValue();
+                paramsMinmatar.weight = val*barGoalMinmatar;
+                paramsAmarr.weight = val*barGoalAmarr;
+                paramsGallente.weight = val*barGoalGallente;
+                paramsCaldari.weight = val*barGoalCaldari;
+                barAmarr.setLayoutParams(paramsAmarr);
+                barMinmatar.setLayoutParams(paramsMinmatar);
+                barCaldari.setLayoutParams(paramsCaldari);
+                barGallente.setLayoutParams(paramsGallente);
+            }
+        });
+        animator.setDuration(5000);
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.start();
+
     }
 
 
@@ -104,7 +152,22 @@ public class MainActivity extends Activity {
             getStringCount(result, amarrCheck);
             getStringCount(result, gallenteCheck);
             getStringCount(result, caldariCheck);
-            helloWorld.setText("M"+minmatar + "  A" + amarr + "  G" + gallente + "  C" + caldari);
+            //helloWorld.setText("M"+minmatar + "  A" + amarr + "  G" + gallente + "  C" + caldari);
+            helloWorld.setText("Faction occupancy:");
+
+            barGoalMinmatar = (minmatar/(minmatar+amarr))*100;
+            barGoalAmarr = (amarr/(minmatar+amarr))*100;
+            barGoalGallente = (gallente/(gallente+caldari))*100;
+            barGoalCaldari = (caldari/(gallente+caldari))*100;
+
+//            paramsMinmatar.weight = (minmatar/(minmatar+amarr))*100;
+//            paramsAmarr.weight = (amarr/(minmatar+amarr))*100;
+//            paramsGallente.weight = (gallente/(gallente+caldari))*100;
+//            paramsCaldari.weight = (caldari/(gallente+caldari))*100;
+//            barAmarr.setLayoutParams(paramsAmarr);
+//            barMinmatar.setLayoutParams(paramsMinmatar);
+//            barCaldari.setLayoutParams(paramsCaldari);
+//            barGallente.setLayoutParams(paramsGallente);
         }
 
         // Count the number of occupied systems in result
