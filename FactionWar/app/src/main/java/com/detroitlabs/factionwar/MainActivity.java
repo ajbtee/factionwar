@@ -104,7 +104,7 @@ public class MainActivity extends Activity {
             getStringCount(result, amarrCheck);
             getStringCount(result, gallenteCheck);
             getStringCount(result, caldariCheck);
-            helloWorld.setText("[ M: " + minmatar + " ] [ A: " + amarr + " ] [ G: " + gallente + " ] [ C: " + caldari + " ]");
+            helloWorld.setText("M"+minmatar + "  A" + amarr + "  G" + gallente + "  C" + caldari);
         }
 
         // Count the number of occupied systems in result
