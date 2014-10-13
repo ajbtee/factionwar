@@ -5,10 +5,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import org.w3c.dom.Document;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.SQLOutput;
@@ -20,8 +24,11 @@ import javax.xml.transform.TransformerFactory;
 
 
 public class MainActivity extends Activity {
-
-    //
+    TextView helloWorld;
+    int minmatar;
+    int amarr;
+    int gallente;
+    int caldari;
 
     // https://neweden-dev.com/API
     // https://api.eveonline.com/Map/FacWarSystems.xml.aspx
@@ -31,11 +38,10 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        TextView helloWorld = (TextView) findViewById(R.id.hello_world);
-        FactionService apiGet = new FactionService();
-        new FactionService().execute();
 
-        helloWorld.setText(apiGet.doInBackground());
+        FactionService apiGet = new FactionService();
+        helloWorld = (TextView) findViewById(R.id.pending_data);
+        new FactionService().execute();
     }
 
 
@@ -64,38 +70,27 @@ public class MainActivity extends Activity {
     class FactionService extends AsyncTask<Void, Void, String> {
 
         String apiOutput = null;
+        String minmatarCheck = "owningFactionName=\"Minmatar Republic\"";
+        String amarrCheck = "owningFactionName=\"Amarr Empire\"";
+        String gallenteCheck = "owningFactionName=\"Gallente Federation\"";
+        String caldariCheck = "owningFactionName=\"Caldari State\"";
 
         @Override
         protected String doInBackground(Void... voids) {
-
-            HttpURLConnection urlConnection = null;
+            StringBuilder responseString = new StringBuilder();
+            String inputLine;
             try {
-                URL url = new URL("http://api.openweathermap.org/data/2.5/weather?q=London&mode=xml");
-                urlConnection = (HttpURLConnection) url.openConnection();
-
-                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder = factory.newDocumentBuilder();
-                Document doc = builder.parse(urlConnection.getInputStream());
-                TransformerFactory transFactory = TransformerFactory.newInstance();
-                Transformer xform = transFactory.newTransformer();
-
-                System.out.println("I FOUND WHAT YOU WANTED: "+urlConnection.getInputStream());
-                apiOutput = String.valueOf(urlConnection.getInputStream());
-                //DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-                //DocumentBuilder db = dbf.newDocumentBuilder();
-                //Document doc = db.parse(new InputSource(url.openStream()));
-                //doc.getDocumentElement().normalize();
-            } catch (Exception e) {
-                System.out.println("\n");
-                System.out.println("SOMETHING WENT WRONG: " + e);
-                System.out.println("\n");
-            } finally {
-                urlConnection.disconnect();
+                URL oracle = new URL("https://api.eveonline.com/Map/FacWarSystems.xml.aspx");
+                HttpURLConnection yc = (HttpURLConnection) oracle.openConnection();
+                BufferedReader in = new BufferedReader(new InputStreamReader(
+                        yc.getInputStream()));
+                while ((inputLine = in.readLine()) != null)
+                    responseString.append(inputLine);
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-            System.out.println("\n");
-            System.out.println("IS IT ME YOU'RE LOOKING FOR: " + apiOutput);
-            System.out.println("\n");
+            apiOutput = responseString.toString();
 
             return apiOutput;
         }
@@ -104,9 +99,29 @@ public class MainActivity extends Activity {
         }
 
         protected void onPostExecute(String result) {
-            System.out.println("\n");
-            System.out.println("I COULD BE THE ONE: " + result);
-            System.out.println("\n");
+            getStringCount(result, minmatarCheck);
+            getStringCount(result, amarrCheck);
+            getStringCount(result, gallenteCheck);
+            getStringCount(result, caldariCheck);
+            helloWorld.setText("[ M: " + minmatar + " ] [ A: " + amarr + " ] [ G: " + gallente + " ] [ C: " + caldari + " ]");
+        }
+
+        // Count the number of occupied systems in result
+        private String getStringCount(String result, String countThis) {
+            int index = result.indexOf(countThis);
+            while (index != -1) {
+                if (countThis == minmatarCheck)
+                    minmatar++;
+                else if (countThis == amarrCheck)
+                    amarr++;
+                else if (countThis == gallenteCheck)
+                    gallente++;
+                else if (countThis == caldariCheck)
+                    caldari++;
+                result = result.substring(index + 1);
+                index = result.indexOf(countThis);
+            }
+            return result;
         }
     }
 }

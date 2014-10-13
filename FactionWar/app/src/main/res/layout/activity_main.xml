@@ -3,13 +3,24 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#101015"
     tools:context=".MainActivity"
     tools:ignore="MergeRootFrame" >
+
     <TextView
-        android:id="@+id/hello_world"
+        android:textColor="#f6f6f6"
+        android:gravity="center"
+        android:id="@+id/pending_data"
         android:text="pending data..."
         android:padding="12dp"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_gravity="center"
+        android:background="@drawable/ic_amarr_w" />
 </FrameLayout>
