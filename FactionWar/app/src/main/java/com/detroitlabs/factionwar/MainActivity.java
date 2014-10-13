@@ -70,6 +70,7 @@ public class MainActivity extends Activity {
     class FactionService extends AsyncTask<Void, Void, String> {
 
         String apiOutput = null;
+        // When this string value appears, increment +1 for relevant faction
         String minmatarCheck = "owningFactionName=\"Minmatar Republic\"";
         String amarrCheck = "owningFactionName=\"Amarr Empire\"";
         String gallenteCheck = "owningFactionName=\"Gallente Federation\"";
