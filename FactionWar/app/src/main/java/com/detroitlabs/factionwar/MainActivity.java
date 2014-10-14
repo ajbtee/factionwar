@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -71,25 +73,6 @@ public class MainActivity extends Activity {
         helloWorld = (TextView) findViewById(R.id.pending_data);
         new FactionService().execute();
 
-        ValueAnimator animator = ValueAnimator.ofFloat(0,1f);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                float val = (Float) valueAnimator.getAnimatedValue();
-                paramsMinmatar.weight = val*barGoalMinmatar;
-                paramsAmarr.weight = val*barGoalAmarr;
-                paramsGallente.weight = val*barGoalGallente;
-                paramsCaldari.weight = val*barGoalCaldari;
-                barAmarr.setLayoutParams(paramsAmarr);
-                barMinmatar.setLayoutParams(paramsMinmatar);
-                barCaldari.setLayoutParams(paramsCaldari);
-                barGallente.setLayoutParams(paramsGallente);
-            }
-        });
-        animator.setDuration(5000);
-        animator.setInterpolator(new AccelerateDecelerateInterpolator());
-        animator.start();
-
     }
 
 
@@ -152,22 +135,35 @@ public class MainActivity extends Activity {
             getStringCount(result, amarrCheck);
             getStringCount(result, gallenteCheck);
             getStringCount(result, caldariCheck);
-            //helloWorld.setText("M"+minmatar + "  A" + amarr + "  G" + gallente + "  C" + caldari);
+
             helloWorld.setText("Faction occupancy:");
+            //helloWorld.setText("M"+minmatar + "  A" + amarr + "  G" + gallente + "  C" + caldari);
 
             barGoalMinmatar = (minmatar/(minmatar+amarr))*100;
             barGoalAmarr = (amarr/(minmatar+amarr))*100;
             barGoalGallente = (gallente/(gallente+caldari))*100;
             barGoalCaldari = (caldari/(gallente+caldari))*100;
 
-//            paramsMinmatar.weight = (minmatar/(minmatar+amarr))*100;
-//            paramsAmarr.weight = (amarr/(minmatar+amarr))*100;
-//            paramsGallente.weight = (gallente/(gallente+caldari))*100;
-//            paramsCaldari.weight = (caldari/(gallente+caldari))*100;
-//            barAmarr.setLayoutParams(paramsAmarr);
-//            barMinmatar.setLayoutParams(paramsMinmatar);
-//            barCaldari.setLayoutParams(paramsCaldari);
-//            barGallente.setLayoutParams(paramsGallente);
+            // Animate the bars
+            ValueAnimator animator = ValueAnimator.ofFloat(0,1f);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    float val = (Float) valueAnimator.getAnimatedValue();
+                    paramsMinmatar.weight = val*barGoalMinmatar;
+                    paramsAmarr.weight = val*barGoalAmarr;
+                    paramsGallente.weight = val*barGoalGallente;
+                    paramsCaldari.weight = val*barGoalCaldari;
+                    barAmarr.setLayoutParams(paramsAmarr);
+                    barMinmatar.setLayoutParams(paramsMinmatar);
+                    barCaldari.setLayoutParams(paramsCaldari);
+                    barGallente.setLayoutParams(paramsGallente);
+                }
+            });
+            animator.setDuration(500);
+
+            animator.setInterpolator(new DecelerateInterpolator());
+            animator.start();
         }
 
         // Count the number of occupied systems in result
