@@ -19,9 +19,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by andrewjb on 10/14/14.
- */
 public class FactionFragment extends Fragment {
 
     TextView helloWorld;
