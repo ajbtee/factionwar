@@ -1,16 +1,23 @@
 package com.detroitlabs.factionwar;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
+
+import com.detroitlabs.factionwar.fragments.FactionFragment;
 
 /**
  * Created by andrewjb on 10/14/14.
  **/
 
 public class MainActivity extends Activity implements SearchView.OnQueryTextListener {
+
+    SearchView searchView;
 
     // https://neweden-dev.com/API
     // https://api.eveonline.com/Map/FacWarSystems.xml.aspx
@@ -21,8 +28,24 @@ public class MainActivity extends Activity implements SearchView.OnQueryTextList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //mainSearch.setOnQueryTextListener(this);
-        //mainSearch.getQuery();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        FactionFragment fragment = new FactionFragment();
+        fragmentTransaction.add(R.id.fragment_container, fragment);
+        fragmentTransaction.commit();
+
+//        // Create new fragment and transaction
+//        Fragment newFragment = new FactionFragment();
+//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//
+//        // Replace whatever is in the fragment_container view with this fragment,
+//        // and add the transaction to the back stack
+//        transaction.replace(R.id.container, newFragment);
+//        transaction.addToBackStack(null);
+//
+//        // Commit the transaction
+//        transaction.commit();
     }
 
     @Override
@@ -30,7 +53,7 @@ public class MainActivity extends Activity implements SearchView.OnQueryTextList
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         MenuItem searchItem = menu.findItem(R.id.search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView = (SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(this);
         return true;
     }
@@ -49,6 +72,7 @@ public class MainActivity extends Activity implements SearchView.OnQueryTextList
 
     @Override
     public boolean onQueryTextSubmit(String s) {
+        FactionFragment.helloWorld.setText(searchView.getQuery());
         return false;
     }
 
