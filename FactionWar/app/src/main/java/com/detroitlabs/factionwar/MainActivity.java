@@ -7,6 +7,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 
 import com.detroitlabs.factionwar.fragments.FactionFragment;
@@ -75,6 +76,8 @@ public class MainActivity extends Activity implements SearchView.OnQueryTextList
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
         searchQuery = searchView.getQuery();
+//        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+//        imm.hideSoftInputFromWindow(R.id.search);
         // FactionFragment.helloWorld.setText(searchQuery);
         return false;
     }
