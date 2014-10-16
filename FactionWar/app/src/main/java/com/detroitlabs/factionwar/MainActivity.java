@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.SearchView;
 
 import com.detroitlabs.factionwar.fragments.FactionFragment;
+import com.detroitlabs.factionwar.fragments.ReportFragment;
 
 /**
  * Created by andrewjb on 10/14/14.
@@ -17,7 +18,10 @@ import com.detroitlabs.factionwar.fragments.FactionFragment;
 
 public class MainActivity extends Activity implements SearchView.OnQueryTextListener {
 
+    public static CharSequence searchQuery;
     SearchView searchView;
+    Fragment factionFragment;
+    Fragment reportFragment;
 
     // https://neweden-dev.com/API
     // https://api.eveonline.com/Map/FacWarSystems.xml.aspx
@@ -28,24 +32,15 @@ public class MainActivity extends Activity implements SearchView.OnQueryTextList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
-        FactionFragment fragment = new FactionFragment();
-        fragmentTransaction.add(R.id.fragment_container, fragment);
+        // Create new fragments and transaction
+        factionFragment = new FactionFragment();
+        reportFragment = new ReportFragment();
+
+        // Commit the transaction
+        fragmentTransaction.add(R.id.fragment_container, factionFragment);
         fragmentTransaction.commit();
-
-//        // Create new fragment and transaction
-//        Fragment newFragment = new FactionFragment();
-//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//
-//        // Replace whatever is in the fragment_container view with this fragment,
-//        // and add the transaction to the back stack
-//        transaction.replace(R.id.container, newFragment);
-//        transaction.addToBackStack(null);
-//
-//        // Commit the transaction
-//        transaction.commit();
     }
 
     @Override
@@ -72,7 +67,15 @@ public class MainActivity extends Activity implements SearchView.OnQueryTextList
 
     @Override
     public boolean onQueryTextSubmit(String s) {
-        FactionFragment.helloWorld.setText(searchView.getQuery());
+
+        // Commit the transaction
+
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, reportFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+        searchQuery = searchView.getQuery();
+        // FactionFragment.helloWorld.setText(searchQuery);
         return false;
     }
 

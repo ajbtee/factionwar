@@ -6,17 +6,25 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.detroitlabs.factionwar.MainActivity;
 import com.detroitlabs.factionwar.R;
 
 /**
  * Created by andrewjb on 10/15/14.
  */
 public class ReportFragment extends Fragment {
+
+    TextView helloWorld;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_report, null);
-        return null;
+        helloWorld = (TextView) rootView.findViewById(R.id.test_string);
+        helloWorld.setText(MainActivity.searchQuery);
+
+        return rootView;
     }
 
     /*
