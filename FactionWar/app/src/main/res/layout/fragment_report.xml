@@ -5,16 +5,12 @@
     android:layout_height="match_parent"
     android:background="@drawable/nebula0"
     android:screenOrientation="portrait" >
-    <ListView
-        android:id="@+id/intel_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </ListView>
+
     <TextView
         android:id="@+id/test_string"
         android:textColor="#f5f5f5"
         android:gravity="center"
-        android:text="null"
+        android:text="loading"
         android:textSize="20sp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

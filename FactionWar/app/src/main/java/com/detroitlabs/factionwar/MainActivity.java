@@ -3,6 +3,7 @@ package com.detroitlabs.factionwar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import com.detroitlabs.factionwar.fragments.ReportFragment;
 public class MainActivity extends Activity implements SearchView.OnQueryTextListener {
 
     public static CharSequence searchQuery;
+    public static boolean reportReady=false;
     SearchView searchView;
     Fragment factionFragment;
     Fragment reportFragment;
@@ -69,12 +71,17 @@ public class MainActivity extends Activity implements SearchView.OnQueryTextList
 
         // Commit the transaction
 
+
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, reportFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
         searchQuery = searchView.getQuery();
         searchView.clearFocus();
+        if(reportReady){
+            ReportFragment.helloWorld.setText("Loading");
+        }
+
         return false;
     }
 

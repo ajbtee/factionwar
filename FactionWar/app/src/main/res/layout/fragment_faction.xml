@@ -108,7 +108,7 @@
         android:textColor="#f5f5f5"
         android:gravity="center"
         android:id="@+id/pending_data"
-        android:text="connecting"
+        android:text="loading"
         android:textSize="20sp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
