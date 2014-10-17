@@ -1,18 +1,23 @@
 package com.detroitlabs.factionwar;
 
+import android.content.Context;
+import android.util.AttributeSet;
 import android.view.View;
 
-/**
- * Created by andrewjb on 10/16/14.
- */
-//public class CorpView extends View {
-//
+//class AllianceView extends View {
+//    public AllianceView(Context context, AttributeSet attrs) {
+//        super(context, attrs);
+//    }
 //}
 //
-//public class AllianceView extends View {
-//
+//class CorpView extends View {
+//    public CorpView(Context context, AttributeSet attrs) {
+//        super(context, attrs);
+//    }
 //}
-//
-//public class SystemView extends View {
-//
-//}
+
+class SystemView extends View {
+    public SystemView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+}

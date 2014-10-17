@@ -21,7 +21,7 @@ import java.net.URL;
 
 public class FactionFragment extends Fragment {
 
-    public static TextView helloWorld;
+    public TextView helloWorld;
     LinearLayout barAmarr;
     LinearLayout barMinmatar;
     LinearLayout barGallente;

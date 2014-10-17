@@ -1,9 +1,15 @@
 <resources>
-    <declare-styleable name="PieChart">
+
+    <declare-styleable name="AllianceView"></declare-styleable>
+
+    <declare-styleable name="CorpView"></declare-styleable>
+
+    <declare-styleable name="SystemView">
         <attr name="showText" format="boolean" />
         <attr name="labelPosition" format="enum">
             <enum name="left" value="0"/>
             <enum name="right" value="1"/>
         </attr>
     </declare-styleable>
+
 </resources>
