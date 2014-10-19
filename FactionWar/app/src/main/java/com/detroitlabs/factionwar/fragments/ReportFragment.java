@@ -46,17 +46,26 @@ import java.net.URL;
  */
 public class ReportFragment extends Fragment {
 
-    public static TextView helloWorld;
+    public TextView helloWorld;
+    public TextView districts;
+    public TextView corp;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_report, null);
         helloWorld = (TextView) rootView.findViewById(R.id.test_string);
+        districts = (TextView) rootView.findViewById(R.id.text_districts);
+        corp = (TextView) rootView.findViewById(R.id.text_corp);
         MainActivity.reportReady=true;
 
         new ReportService().execute();
 
         return rootView;
+    }
+
+    public void repService(){
+        helloWorld.setText("loading");
+        new ReportService().execute();
     }
 
     /*
@@ -96,7 +105,9 @@ public class ReportFragment extends Fragment {
 
             String searchFor = String.valueOf(MainActivity.searchQuery);
             getStringCount(result, "\"name\": \""+MainActivity.searchQuery+"\"");
-            helloWorld.setText(String.valueOf(ownedCount));
+            helloWorld.setText("");
+            districts.setText(String.valueOf(ownedCount));
+            corp.setText(MainActivity.searchQuery);
             //helloWorld.setText(result);
         }
 

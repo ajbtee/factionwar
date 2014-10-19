@@ -1,10 +1,57 @@
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/nebula0"
+    android:orientation="vertical"
+    android:weightSum="4"
     android:screenOrientation="portrait" >
+
+
+    <LinearLayout
+        android:layout_marginTop="80dp"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#A3A3A3"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:text="Corp"/>
+        <TextView
+            android:id="@+id/text_corp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#f5f5f5"
+            android:textSize="40sp"
+            android:gravity="center"
+            android:text=""/>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#A3A3A3"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:text="Districts"/>
+        <TextView
+            android:id="@+id/text_districts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#f5f5f5"
+            android:textSize="40sp"
+            android:gravity="center"
+            android:text=""/>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/test_string"
@@ -13,5 +60,6 @@
         android:text="loading"
         android:textSize="20sp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</FrameLayout>
+        android:layout_weight="1"
+        android:layout_height="wrap_content" />
+</LinearLayout>

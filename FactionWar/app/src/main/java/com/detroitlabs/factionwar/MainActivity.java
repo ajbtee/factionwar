@@ -21,8 +21,8 @@ public class MainActivity extends Activity implements SearchView.OnQueryTextList
     public static CharSequence searchQuery;
     public static boolean reportReady=false;
     SearchView searchView;
-    Fragment factionFragment;
-    Fragment reportFragment;
+    FactionFragment factionFragment;
+    ReportFragment reportFragment;
 
     // https://neweden-dev.com/API
     // https://api.eveonline.com/Map/FacWarSystems.xml.aspx
@@ -79,7 +79,7 @@ public class MainActivity extends Activity implements SearchView.OnQueryTextList
         searchQuery = searchView.getQuery();
         searchView.clearFocus();
         if(reportReady){
-            ReportFragment.helloWorld.setText("Loading");
+            reportFragment.repService();
         }
 
         return false;
